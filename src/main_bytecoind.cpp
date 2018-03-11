@@ -14,12 +14,12 @@
 using namespace bytecoin;
 
 static const char USAGE[] =
-    R"(bytecoind.
+    R"(TurtleCoind.
 
 Usage:
-  bytecoind [options]
-  bytecoind --help | -h
-  bytecoind --version | -v
+  TurtleCoind [options]
+  TurtleCoind --help | -h
+  TurtleCoind --version | -v
 
 Options:
   --export-blocks=<directory>        Export blockchain into specified directory as blocks.bin and blockindexes.bin, then exit. This overwrites existing files.
@@ -29,7 +29,7 @@ Options:
   --testnet                          Configure for testnet.
   --p2p-bind-address=<ip:port>       Interface and port for P2P network protocol [default: 0.0.0.0:8080].
   --p2p-external-port=<port>         External port for P2P network protocol, if port forwarding used with NAT [default: 8080].
-  --bytecoind-bind-address=<ip:port> Interface and port for bytecoind RPC [default: 0.0.0.0:8081].
+  --TurtleCoind-bind-address=<ip:port> Interface and port for TurtleCoind RPC [default: 0.0.0.0:8081].
   --seed-node-address=<ip:port>      Specify list (one or more) of nodes to start connecting to.
   --priority-node-address=<ip:port>  Specify list (one or more) of nodes to connect to and attempt to keep the connection open.
   --exclusive-node-address=<ip:port> Specify list (one or more) of nodes to connect to only. All other nodes including seed nodes will be ignored.
@@ -40,7 +40,7 @@ Options:
   --ssl-certificate-password=<pass>  DEPRECATED. Will read password from stdin if not specified
 )"
 #endif
-    R"(  --bytecoind-authorization=<auth>   HTTP Basic Authorization header (base64 of login:password)
+    R"(  --TurtleCoind-authorization=<auth>   HTTP Basic Authorization header (base64 of login:password)
 )";
 
 int main(int argc, const char *argv[]) try {
@@ -68,10 +68,10 @@ int main(int argc, const char *argv[]) try {
 
 	const std::string coinFolder = config.get_coin_directory();
 
-	platform::ExclusiveLock coin_lock(coinFolder, "bytecoind.lock");
+	platform::ExclusiveLock coin_lock(coinFolder, "TurtleCoind.lock");
 
 	logging::LoggerManager logManager;
-	logManager.configure_default(config.get_coin_directory("logs"), "bytecoind-");
+	logManager.configure_default(config.get_coin_directory("logs"), "TurtleCoind-");
 
 	BlockChainState block_chain(logManager, config, currency);
 
@@ -88,7 +88,7 @@ int main(int argc, const char *argv[]) try {
 
 	auto idea_ms =
 	    std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - idea_start);
-	std::cout << "bytecoind started seconds=" << double(idea_ms.count()) / 1000 << std::endl;
+	std::cout << "TurtleCoind started seconds=" << double(idea_ms.count()) / 1000 << std::endl;
 	while (!io.stopped()) {
 		if (node.on_idle())  // Using it to load blockchain
 			io.poll();
@@ -100,4 +100,3 @@ int main(int argc, const char *argv[]) try {
 	std::cout << "Exception in main() - " << ex.what() << std::endl;
 	throw;
 }
-
